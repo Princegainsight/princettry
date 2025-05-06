@@ -5,7 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const signOutButton = document.getElementById('signout-btn');
     const userDisplay = document.getElementById('user-display');
     const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
+
+    // Define an array to store users' credentials
+    const users = [
+        { userId: 'prince1234', password: '1234', name: 'Prince' },
+        { userId: 'ayush1234', password: '1234', name: 'Ayush' },
+        { userId: 'srini2134', password: '1234', name: 'Srini' }
+    ];
 
     // Toggle the mobile nav menu
     if (menuIcon) {
@@ -28,35 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Validate the password is entered and any other simple client checks
-            if (username && password) {
-                const storedName = window.localStorage.getItem('displayName');
-                if (storedName) {
-                    alert('Login successful');
-                    window.localStorage.setItem('currentUserName', storedName); // Save current session user's name
-                    window.location.href = 'index.html';
-                } else {
-                    alert('Please register first');
-                }
+            // Validate the provided username and password
+            const user = users.find(user => user.userId === username && user.password === password);
+            if (user) {
+                // Save user's name in local storage
+                window.localStorage.setItem('currentUserName', user.name);
+                alert(`Welcome, ${user.name}!`);
+                window.location.href = 'index.html'; // Redirect to index.html
             } else {
-                alert('Please enter a username and password');
-            }
-        });
-    }
-
-    // Simulate registration form submission
-    if (registerForm) {
-        const registerButton = document.getElementById('register-btn');
-        registerButton.addEventListener('click', function () {
-            const regName = document.getElementById('reg-name').value;
-            const regEmail = document.getElementById('reg-email').value;
-            const regPassword = document.getElementById('reg-password').value;
-
-            if (regName && regEmail && regPassword) {
-                window.localStorage.setItem('displayName', regName); // Store the name for use after login
-                alert(`Registration successful for ${regName}`);
-            } else {
-                alert('Please complete all registration fields');
+                alert('Invalid username or password');
             }
         });
     }
@@ -68,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         userDisplay.textContent = storedUserName;
         userDisplay.classList.remove('hidden');
         signOutButton.classList.remove('hidden');
-
         signOutButton.addEventListener('click', function () {
             window.localStorage.removeItem('currentUserName');
             alert('You have been signed out');
@@ -78,4 +63,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
